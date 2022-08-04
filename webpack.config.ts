@@ -1,9 +1,9 @@
-const path = require('path');
-const webpack = require('webpack');
-const HtmlPlugin = require('html-webpack-plugin');
-const CopyPlugin = require('copy-webpack-plugin');
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-const pkg = require('./package.json');
+import * as path from 'path';
+import { Configuration, DefinePlugin } from 'webpack';
+import HtmlPlugin from 'html-webpack-plugin';
+import CopyPlugin from 'copy-webpack-plugin';
+import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
+import pkg from './package.json';
 
 const buildManifest = (buffer) => {
   var manifest = JSON.parse(buffer.toString());
@@ -18,8 +18,8 @@ const { WEBPACK_ENV } = process.env;
 const MODE = WEBPACK_ENV || 'none';
 const DEVTOOL = WEBPACK_ENV === 'production' ? 'source-map' : 'inline-cheap-source-map';
 
-module.exports = {
-  mode: MODE,
+const config : Configuration = {
+  mode: MODE as Configuration['mode'],
   devtool: DEVTOOL,
   target: 'web',
   entry: {
@@ -87,7 +87,7 @@ module.exports = {
         memoryLimit: 4096,
       }
     }),
-    new webpack.DefinePlugin({
+    new DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(WEBPACK_ENV),
     }),
     new HtmlPlugin({
@@ -114,3 +114,5 @@ module.exports = {
     })
   ]
 };
+
+export default config
